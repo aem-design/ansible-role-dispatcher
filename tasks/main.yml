@@ -1,0 +1,77 @@
+---
+
+- name: "set facts"
+  set_fact:
+    role_comment: "( {{ docker_container_name | default('dispatcher') }} )"
+  tags:
+    - always
+
+- name: dispatcher parameters {{ role_comment }}
+#  no_log: "{{ debug_hide }}"
+  debug:
+    msg:
+      - "APACHE_MODULES={{ apache_modules }}"
+      - "APACHE_SSL_SUBJ={{ apache_ssl_subj }}"
+      - "APACHE_RUN_USER={{ apache_run_user }}"
+      - "APACHE_RUN_GROUP={{ apache_run_group }}"
+      - "APACHE_RUN_USERID={{ apache_run_userid }}"
+      - "APACHE_RUN_GROUPID={{ apache_run_groupid }}"
+      - "APACHE_LOGLEVEL={{ apache_loglevel }}"
+      - "APACHE_VERSION={{ apache_version }}"
+      - "DISPATCHER_VERSION={{ dispatcher_version }}"
+      - "DISPATCHER_LOGLEVEL={{ dispatcher_loglevel }}"
+      - "DISPATCHER_CONFIG={{ dispatcher_config }}"
+      - "DISPATCHER_NAME={{ dispatcher_name }}"
+      - "DISPATCHER_PROPOGATESYNDPOST={{ dispatcher_propogatesyndpost }}"
+      - "DISPATCHER_SERVESTALEONERROR={{ dispatcher_servestaleonerror }}"
+      - "DISPATCHER_STATLEVEL={{ dispatcher_statlevel }}"
+      - "DISPATCHER_CACHEAUTHORIZED={{ dispatcher_cacheauthorized }}"
+      - "DISPATCHER_SESSIONMANAGEMENT={{ dispatcher_sessionmanagement }}"
+      - "RENDERER_HOST={{ renderer_host }}"
+      - "RENDERER_PORT={{ renderer_port }}"
+      - "RENDERER_TIMEOUT={{ renderer_timeout }}"
+      - "RENDERER_RESOLVE={{ renderer_resolve }}"
+  tags:
+    - docker-container
+
+- name: ensure image is present {{ role_comment }}
+  include_role:
+    name: docker-image
+  tags:
+    - docker-image
+
+- name: ensure container is started {{ role_comment }}
+  include_role:
+    name: aem_design.docker_container
+  vars:
+    env:
+      TZ: "{{ docker.timezone }}"
+      APACHE_MODULES: "{{ apache_modules }}"
+      APACHE_SSL_SUBJ: "{{ apache_ssl_subj }}"
+      APACHE_RUN_USER: "{{ apache_run_user }}"
+      APACHE_RUN_GROUP: "{{ apache_run_group }}"
+      APACHE_RUN_USERID: "{{ apache_run_userid }}"
+      APACHE_RUN_GROUPID: "{{ apache_run_groupid }}"
+      APACHE_LOGLEVEL: "{{ apache_loglevel }}"
+      APACHE_VERSION: "{{ apache_version }}"
+      DISPATCHER_VERSION: "{{ dispatcher_version }}"
+      DISPATCHER_LOGLEVEL: "{{ dispatcher_loglevel }}"
+      DISPATCHER_CONFIG: "{{ dispatcher_config }}"
+      DISPATCHER_NAME: "{{ dispatcher_name }}"
+      DISPATCHER_PROPOGATESYNDPOST: "{{ dispatcher_propogatesyndpost }}"
+      DISPATCHER_SERVESTALEONERROR: "{{ dispatcher_servestaleonerror }}"
+      DISPATCHER_STATLEVEL: "{{ dispatcher_statlevel }}"
+      DISPATCHER_CACHEAUTHORIZED: "{{ dispatcher_cacheauthorized }}"
+      DISPATCHER_SESSIONMANAGEMENT: "{{ dispatcher_sessionmanagement }}"
+      RENDERER_HOST: "{{ renderer_host }}"
+      RENDERER_PORT: "{{ renderer_port }}"
+      RENDERER_TIMEOUT: "{{ renderer_timeout }}"
+      RENDERER_RESOLVE: "{{ renderer_resolve }}"
+  tags:
+    - docker-container
+
+- name: update host network iptables {{ role_comment }}
+  include_role:
+    name: config-iptables
+  tags:
+    - host-config

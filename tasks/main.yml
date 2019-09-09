@@ -65,6 +65,6 @@
 
 - name: update host network iptables {{ role_comment }}
   include_role:
-    name: config-iptables
+    name: aem_design.config_iptables
   tags:
     - host-config

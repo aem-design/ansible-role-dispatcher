@@ -62,9 +62,3 @@
       RENDERER_RESOLVE: "{{ renderer_resolve }}"
   tags:
     - docker-container
-
-- name: update host network iptables {{ role_comment }}
-  include_role:
-    name: aem_design.config_iptables
-  tags:
-    - host-config

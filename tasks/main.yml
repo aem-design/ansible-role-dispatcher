@@ -33,12 +33,6 @@
   tags:
     - docker-container
 
-- name: ensure image is present {{ role_comment }}
-  include_role:
-    name: docker-image
-  tags:
-    - docker-image
-
 - name: ensure container is started {{ role_comment }}
   include_role:
     name: aem_design.docker_container

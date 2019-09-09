@@ -7,7 +7,6 @@
     - always
 
 - name: dispatcher parameters {{ role_comment }}
-#  no_log: "{{ debug_hide }}"
   debug:
     msg:
       - "APACHE_MODULES={{ apache_modules }}"

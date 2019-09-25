@@ -60,16 +60,13 @@ Available variables are listed below, along with default values (see `defaults/m
 |                              	|          	| "author-dispatcher-cache:/data/httpd/cache:z",            	|                                                                      	|
 |                              	|          	| "author-dispatcher-logs:/data/httpd/logs:z"               	|                                                                      	|
 |                              	|          	|                                                           	|                                                                      	|
-| iptable_rules                	|          	|                                                           	|                                                                      	|
-|                              	|          	| - port: "{{ aem_port | default('80') }}"                  	|                                                                      	|
-|                              	|          	| comment: "service_{{ docker_container_name }}_port"       	|                                                                      	|
-|                              	|          	| - port: "{{ aem_debug_port | default('443') }}"           	|                                                                      	|
-|                              	|          	| comment: "service_{{ docker_container_name }}_debug_port" 	|                                                                      	|
+| docker_host                       |           | unix://var/run/docker.sock | host where to run the docker container for executing pyaem2 commands |
+|                              	|          	|                                                           	|                                                                      	|
 
 
 ## Dependencies
 
-This role depends on role `aem_design.docker_container`.
+None.
 
 ## Example Playbook
 

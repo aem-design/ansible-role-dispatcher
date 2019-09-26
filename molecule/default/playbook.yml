@@ -6,7 +6,9 @@
     local_role_name: "ansible-role-dispatcher"
     role_name: "{% if lookup('env','ROLE_NAME_FULL') %}{{ lookup('env','ROLE_NAME_FULL') }}{% else %}{{ local_role_name }}{% endif %}"
     test_container_name: "{{ local_role_name }}-test"
-    test_aem_page: "AEM Sign In"
+    test_aem_page_content: "AEM Sign In"
+    test_aem_port: "9980"
+    test_aem_page_url: "/libs/granite/core/content/login.html"
 
   pre_tasks:
     - name: get docker host ip
@@ -50,11 +52,11 @@
   post_tasks:
     - name: wait until dispatcher return value from author {{ role_comment }}
       uri:
-        url: "http://{{ dockerhost_ip.stdout }}:5502"
+        url: "http://{{ dockerhost_ip.stdout }}:{{ test_aem_port }}{{ test_aem_page_url }}"
+        follow_redirects: "all"
         return_content: true
         timeout: 300
-        status_code: 403
       register: aem_page
-      until: test_aem_page in aem_page.content
+      until: test_aem_page_content in aem_page.content
       delay: "{{ wait_delay | default(5) }}"
       retries: 360

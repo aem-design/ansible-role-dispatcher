@@ -9,6 +9,11 @@
 - name: dispatcher parameters {{ role_comment }}
   debug:
     msg:
+      - "docker_container_name={{ docker_container_name }}"
+      - "image={{ docker_image }}{% if docker_image %}:{% endif %}{{ docker_image_tag }}"
+      - "docker_published_ports={{ docker_published_ports }}"
+      - "volumes={{ volumes }}"
+      - "docker_host={{ docker_host }}"
       - "APACHE_MODULES={{ apache_modules }}"
       - "APACHE_SSL_SUBJ={{ apache_ssl_subj }}"
       - "APACHE_RUN_USER={{ apache_run_user }}"
@@ -34,11 +39,14 @@
     - docker-container
 
 - name: ensure container is started {{ role_comment }}
-  include_role:
-    name: aem_design.docker_container
-  vars:
+  docker_container:
+    name: "{{ docker_container_name }}"
+    image: "{{ docker_image }}{% if docker_image %}:{% endif %}{{ docker_image_tag }}"
+    published_ports: "{{ docker_published_ports }}"
+    volumes: "{{ docker_volumes }}"
+    docker_host: "{{ docker_host }}"
     env:
-      TZ: "{{ docker.timezone }}"
+      TZ: "{{ docker_timezone }}"
       APACHE_MODULES: "{{ apache_modules }}"
       APACHE_SSL_SUBJ: "{{ apache_ssl_subj }}"
       APACHE_RUN_USER: "{{ apache_run_user }}"

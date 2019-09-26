@@ -36,6 +36,7 @@
     }
     - {
       role: "{{ role_name }}",
+      docker_host: "unix://tmp/docker.sock",
       renderer_port: "5502",
       renderer_host: "{{ dockerhost_ip.stdout }}",
       dispatcher_config: "author",

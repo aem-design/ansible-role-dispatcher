@@ -1,3 +1,4 @@
 ---
 # from galaxy
-- src: aem_design.docker_container
+- src: aem_design.aem_license
+- src: aem_design.aem_verify

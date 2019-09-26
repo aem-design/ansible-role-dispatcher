@@ -5,6 +5,7 @@ docker_image_name: "dispatcher"
 docker_image: "{{ docker_image_user }}/{{ docker_image_name }}"
 docker_image_tag: "latest"
 docker_container_name: "author-dispatcher"
+docker_timezone: "Australia/Melbourne"
 
 docker_container_user: "apache"
 docker_container_userid: 1100
@@ -16,23 +17,23 @@ apache_modules: "/dispatcher/httpd/modules"
 apache_ssl_subj: "/c=au/st=vic/l=melbourne/o=aem design/cn=dispatcher"
 apache_run_user: "apache"
 apache_run_group: "apache"
-apache_run_userid: 1100
-apache_run_groupid: 1100
+apache_run_userid: "1100"
+apache_run_groupid: "1100"
 apache_loglevel: "info"
 apache_version: "2.4"
 dispatcher_version: "4.3.2"
 dispatcher_loglevel: "2"                                    # log level for the dispatcher module: error, warn, info, debug, trace
 dispatcher_config: "author"
 dispatcher_name: "dispatcher"
-dispatcher_propogatesyndpost: 0
-dispatcher_servestaleonerror: 1
-dispatcher_statlevel: 3
-dispatcher_cacheauthorized: 0
-dispatcher_sessionmanagement: 0
+dispatcher_propogatesyndpost: "0"
+dispatcher_servestaleonerror: "1"
+dispatcher_statlevel: "3"
+dispatcher_cacheauthorized: "0"
+dispatcher_sessionmanagement: "0"
 renderer_host: "localhost"
-renderer_port: 4502
-renderer_timeout: 10000
-renderer_resolve: 1
+renderer_port: "4502"
+renderer_timeout: "10000"
+renderer_resolve: "1"
 dispatcher_port: "{{ service_dispatcher_port | default('80') }}"
 dispatcher_https_port: "{{ service_dispatcher_https_port | default('443') }}"
 
@@ -45,8 +46,4 @@ docker_volumes: [
   "author-dispatcher-logs:/data/httpd/logs:z"
 ]
 
-iptable_rules:
-  - port: "{{ aem_port | default('80') }}"
-    comment: "service_{{ docker_container_name }}_port"
-  - port: "{{ aem_debug_port | default('443') }}"
-    comment: "service_{{ docker_container_name }}_debug_port"
+docker_host: "unix://var/run/docker.sock"    # host where to run the docker container for executing pyaem2 commands

@@ -38,7 +38,7 @@ Available variables are listed below, along with default values (see `defaults/m
 | apache_version               	|          	| 2.4                                                       	|                                                                      	|
 | dispatcher_version           	|          	| 4.3.2                                                     	|                                                                      	|
 | dispatcher_loglevel          	|          	| 2                                                         	| log level for the dispatcher module: error, warn, info, debug, trace 	|
-| dispatcher_config            	|          	| author                                                    	|                                                                      	|
+| dispatcher_config            	|          	| author                                                    	| which config to use in docker container                               |
 | dispatcher_name              	|          	| dispatcher                                                	|                                                                      	|
 | dispatcher_propogatesyndpost 	|          	| 0                                                         	|                                                                      	|
 | dispatcher_servestaleonerror 	|          	| 1                                                         	|                                                                      	|

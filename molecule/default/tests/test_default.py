@@ -12,7 +12,8 @@ def test_dispatcher_cached_content_successfully():
 
     client = docker.client.from_env()
     container = client.containers.get("ansible-role-dispatcher-test")
-    exit_code, output = container.exec_run("find /data/httpd/cache/ -name generic-details.html")
+    exit_code, output = container.exec_run(
+        "find /data/httpd/cache/ -name generic-details.html")
 
     assert '/data/httpd/cache/content/aemdesign-showcase' \
            '/au/en/component/details/generic-details.html' \

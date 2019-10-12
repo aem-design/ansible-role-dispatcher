@@ -30,7 +30,7 @@ platforms:
     privileged: true
     pre_build_image: true
   - name: aemtest
-    image: "aemdesign/aem:6.5.0"
+    image: "aemdesign/aem:6.5.0-bundle"
     command: ""
     published_ports:
       - 5502:8080
@@ -39,12 +39,28 @@ platforms:
       AEM_JVM_OPTS:
         -server -Xms248m -Xmx1524m -XX:MaxDirectMemorySize=256M -XX:+CMSClassUnloadingEnabled -Djava.awt.headless=true
         -Dorg.apache.felix.http.host=0.0.0.0"
-      AEM_RUNMODE: "-Dsling.run.modes=author,crx3,crx3tar,dev"
+      AEM_RUNMODE: "-Dsling.run.modes=publish,crx3,crx3tar,dev"
     pre_build_image: true
     privileged: true
 scenario:
   name: default
+  test_sequence:
+    - lint
+    - dependency
+    #    - cleanup
+    #    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    #    - idempotence
+    - side_effect
+    - verify
+    #    - cleanup
+    #    - destroy
 verifier:
   name: testinfra
+  options:
+    verbose: true
   lint:
     name: flake8

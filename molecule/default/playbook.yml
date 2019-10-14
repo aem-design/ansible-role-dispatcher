@@ -7,7 +7,9 @@
     role_name: "{% if lookup('env','ROLE_NAME_FULL') %}{{ lookup('env','ROLE_NAME_FULL') }}{% else %}{{ local_role_name }}{% endif %}"
     test_container_name: "{{ local_role_name }}-test"
     test_aem_page_content: "AEM Sign In"
-    test_aem_port: "9980"
+    test_aem_port: "{{ service_aem_port }}"
+    test_dispatcher_port: "9080"
+    test_dispatcher_port_https: "9081"
     test_aem_page_url: "/libs/granite/core/content/login.html"
     test_aem_page_content_url: "/content/aemdesign-showcase/au/en/component/details/generic-details.html"
     test_aem_page_content_test: "Generic Details"
@@ -31,35 +33,50 @@
       vars:
         aem_license_key: "{{ service_aem_license_key }}"
         aem_license_name: "{{ service_aem_license_name }}"
-        aem_port: "5502"
+        aem_port: "{{ test_aem_port }}"
         aem_host: "{{ dockerhost_ip.stdout }}"
         debug_hide: false
     - name: verify aem is ready
       include_role:
         name: "aem_design.aem_verify"
       vars:
-        aem_port: "5502"
+        aem_port: "{{ test_aem_port }}"
         aem_host: "{{ dockerhost_ip.stdout }}"
+        debug_hide: false
+    - name: set permissions for vanityUrls
+      include_role:
+        name: "{{ role_name }}"
+      vars:
+        aem_port: "{{ test_aem_port }}"
+        aem_host: "{{ dockerhost_ip.stdout }}"
+        aem_content_action: "set_permission"
+        aem_content_list:
+          - {
+            user_or_group_name: 'everyone',
+            path: '/libs/granite/dispatcher/content/vanityUrls',
+            permissions: 'read:true'
+          }
         debug_hide: false
     - name: setup dispatcher
       include_role:
         name: "{{ role_name }}"
       vars:
         docker_host: "unix://tmp/docker.sock"
-        renderer_port: "5502"
+        renderer_port: "{{ test_aem_port }}"
         renderer_host: "{{ dockerhost_ip.stdout }}"
-        dispatcher_config: "author"
+        dispatcher_config: "publish"
+        dispatcher_loglevel: "4"
         docker_container_name: "{{ test_container_name }}"
         docker_published_ports: [
-          "9980:8080",
-          "9981:8443"
+          "{{ test_dispatcher_port }}:8080",
+          "{{ test_dispatcher_port_https }}:8443"
         ]
         debug_hide: false
 
   post_tasks:
     - name: wait until dispatcher return value from author {{ role_comment }}
       uri:
-        url: "http://{{ dockerhost_ip.stdout }}:{{ test_aem_port }}{{ test_aem_page_url }}"
+        url: "http://{{ dockerhost_ip.stdout }}:{{ test_dispatcher_port }}{{ test_aem_page_url }}"
         follow_redirects: "all"
         return_content: true
         timeout: 300
@@ -69,7 +86,7 @@
       retries: 360
     - name: get sample content page from dispatcher {{ role_comment }}
       uri:
-        url: "http://{{ dockerhost_ip.stdout }}:{{ test_aem_port }}{{ test_aem_page_content_url }}"
+        url: "http://{{ dockerhost_ip.stdout }}:{{ test_dispatcher_port }}{{ test_aem_page_content_url }}"
         follow_redirects: "all"
         return_content: true
         timeout: 300

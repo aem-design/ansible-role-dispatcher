@@ -20,6 +20,7 @@ provisioner:
         service_aem_license_key: "${AEM_KEY}"
         service_aem_license_name: "${AEM_NAME}"
         role_name: "${ROLE_NAME_FULL}"
+        service_aem_port: "5503"
 platforms:
   - name: instance
     image: "aemdesign/ansible-playbook:${MOLECULE_DISTRO:-centos7}"
@@ -33,7 +34,7 @@ platforms:
     image: "aemdesign/aem:6.5.0-bundle"
     command: ""
     published_ports:
-      - 5502:8080
+      - "5503:8080"
     env:
       TZ: "Australia/Sydney"
       AEM_JVM_OPTS:

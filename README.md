@@ -1,6 +1,9 @@
 # Ansible Role: Dispatcher
 
 [![Build Status](https://travis-ci.org/aem-design/ansible-role-dispatcher.svg?branch=master)](https://travis-ci.org/aem-design/ansible-role-dispatcher)
+[![Ansible Role](https://img.shields.io/ansible/role/d/43187)](https://galaxy.ansible.com/aem_design/dispatcher/)
+[![Ansible Role](https://img.shields.io/ansible/role/43187)](https://galaxy.ansible.com/aem_design/dispatcher/)
+[![Docker Container](https://img.shields.io/badge/container-aemdesign%2Fdispatcher-blue)](https://hub.docker.com/r/aemdesign/dispatcher)
 
 Setup Dispatcher service to go provide cache for your AEM instances.
 > This role was developed as part of
@@ -91,6 +94,14 @@ None.
           ],
         tags: dispatcher-author
       }
+```
+
+## Role Info
+
+To check role info run the following:
+
+```bash
+docker run --rm aemdesign/ansible-playbook:centos7 ansible-galaxy info aem_design.dispatcher
 ```
 
 ## License

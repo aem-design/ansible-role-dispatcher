@@ -4,7 +4,7 @@ docker_image_user: "aemdesign"
 docker_image_name: "dispatcher"
 docker_image: "{{ docker_image_user }}/{{ docker_image_name }}"
 docker_image_tag: "latest"
-docker_container_name: "author-dispatcher"
+docker_container_name: "dispatcher"
 docker_timezone: "Australia/Melbourne"
 
 docker_container_user: "apache"
@@ -34,8 +34,9 @@ renderer_host: "localhost"
 renderer_port: "4502"
 renderer_timeout: "10000"
 renderer_resolve: "1"
-dispatcher_port: "{{ service_dispatcher_port | default('80') }}"
-dispatcher_https_port: "{{ service_dispatcher_https_port | default('443') }}"
+
+dispatcher_port: "8080"
+dispatcher_https_port: "8443"
 
 docker_published_ports: [
   "0.0.0.0:{{ dispatcher_port }}:8080/tcp",

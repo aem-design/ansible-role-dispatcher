@@ -72,6 +72,7 @@
           "{{ test_dispatcher_port }}:8080",
           "{{ test_dispatcher_port_https }}:8443"
         ]
+        docker_volumes: []
         debug_hide: false
 
   post_tasks:

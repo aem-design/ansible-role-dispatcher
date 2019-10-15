@@ -25,8 +25,6 @@
         executable: /bin/bash
       register: dockerhost_ip
       changed_when: false
-
-  tasks:
     - name: set aem license
       include_role:
         name: "aem_design.aem_license"
@@ -58,22 +56,23 @@
             permissions: 'read:true'
           }
         debug_hide: false
-    - name: setup dispatcher
-      include_role:
-        name: "{{ role_name }}"
-      vars:
-        docker_host: "unix://tmp/docker.sock"
-        renderer_port: "{{ test_aem_port }}"
-        renderer_host: "{{ dockerhost_ip.stdout }}"
-        dispatcher_config: "publish"
-        dispatcher_loglevel: "4"
-        docker_container_name: "{{ test_container_name }}"
-        docker_published_ports: [
-          "{{ test_dispatcher_port }}:8080",
-          "{{ test_dispatcher_port_https }}:8443"
-        ]
-        docker_volumes: []
-        debug_hide: false
+
+  roles:
+    - {
+      role: "{{ role_name }}",
+      docker_host: "unix://tmp/docker.sock",
+      renderer_port: "{{ test_aem_port }}",
+      renderer_host: "{{ dockerhost_ip.stdout }}",
+      dispatcher_config: "publish",
+      dispatcher_loglevel: "4",
+      docker_container_name: "{{ test_container_name }}",
+      docker_published_ports: [
+        "{{ test_dispatcher_port }}:8080",
+        "{{ test_dispatcher_port_https }}:8443"
+      ],
+      docker_volumes: [],
+      debug_hide: false
+    }
 
   post_tasks:
     - name: wait until dispatcher return value from author {{ role_comment }}

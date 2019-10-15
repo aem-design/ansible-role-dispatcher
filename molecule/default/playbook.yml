@@ -14,6 +14,7 @@
     test_aem_page_content_url: "/content/aemdesign-showcase/au/en/component/details/generic-details.html"
     test_aem_page_content_test: "Generic Details"
     test_aem_page_content_cache_test: "/data/httpd/cache{{ test_aem_page_content_url }}"
+    test_docker_host: "unix://tmp/docker.sock"
 
   pre_tasks:
     - name: get docker host ip
@@ -60,16 +61,14 @@
   roles:
     - {
       role: "{{ role_name }}",
-      docker_host: "unix://tmp/docker.sock",
+      docker_host: "{{ test_docker_host }}",
       renderer_port: "{{ test_aem_port }}",
       renderer_host: "{{ dockerhost_ip.stdout }}",
       dispatcher_config: "publish",
       dispatcher_loglevel: "4",
       docker_container_name: "{{ test_container_name }}",
-      docker_published_ports: [
-        "{{ test_dispatcher_port }}:8080",
-        "{{ test_dispatcher_port_https }}:8443"
-      ],
+      dispatcher_port: "{{ test_dispatcher_port }}",
+      dispatcher_https_port: "{{ test_dispatcher_port_https }}",
       docker_volumes: [],
       debug_hide: false
     }

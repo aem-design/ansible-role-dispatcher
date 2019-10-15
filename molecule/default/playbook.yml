@@ -35,6 +35,7 @@
         aem_license_name: "{{ service_aem_license_name }}"
         aem_port: "{{ test_aem_port }}"
         aem_host: "{{ dockerhost_ip.stdout }}"
+        wait_delay: 30
         debug_hide: false
     - name: verify aem is ready
       include_role:

@@ -1,0 +1,52 @@
+---
+- name: Converge
+  hosts: instance
+  become: true
+  vars:
+    local_role_name: "ansible-role-dispatcher"
+    role_name: "{% if lookup('env','ROLE_NAME_FULL') %}{{ lookup('env','ROLE_NAME_FULL') }}{% else %}{{ local_role_name }}{% endif %}"
+    test_container_name: "{{ local_role_name }}-test"
+    test_dispatcher_port: "9080"
+    test_dispatcher_port_https: "9081"
+    test_docker_host: "unix://tmp/docker.sock"
+    test_nginx_port: "9180"
+    test_nginx_page_content_url: "/content/aemdesign-showcase/au/en/component/details/generic-details.html"
+    test_nginx_page_content_test: "generic-details.html"
+    test_nginx_page_content_cache_test: "/data/httpd/cache{{ test_nginx_page_content_url }}"
+
+  pre_tasks:
+    - name: get docker host ip
+      become: true
+      shell: |
+        set -o pipefail
+        /sbin/ip route | awk '/default/ { print $3 }'
+      args:
+        executable: /bin/bash
+      register: dockerhost_ip
+      changed_when: false
+    - name: start disaptcher
+      import_role:
+        name: "{{ role_name }}"
+      vars:
+        docker_host: "{{ test_docker_host }}"
+        renderer_port: "{{ test_nginx_port }}"
+        renderer_host: "{{ dockerhost_ip.stdout }}"
+        dispatcher_config: "publish"
+        dispatcher_loglevel: "4"
+        docker_container_name: "{{ test_container_name }}"
+        dispatcher_port: "{{ test_dispatcher_port }}"
+        dispatcher_https_port: "{{ test_dispatcher_port_https }}"
+        docker_volumes: []
+        debug_hide: false
+
+  post_tasks:
+    - name: get sample content page from dispatcher {{ role_comment }}
+      uri:
+        url: "http://{{ dockerhost_ip.stdout }}:{{ test_dispatcher_port }}{{ test_nginx_page_content_url }}"
+        follow_redirects: "all"
+        return_content: true
+        timeout: 300
+      register: dispatcher_content_page
+      until: test_nginx_page_content_test in dispatcher_content_page.content
+      delay: "{{ wait_delay | default(5) }}"
+      retries: 360

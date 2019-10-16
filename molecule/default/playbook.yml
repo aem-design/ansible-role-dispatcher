@@ -75,7 +75,7 @@
         debug_hide: false
 
   post_tasks:
-    - name: wait until dispatcher return value from author {{ role_comment }}
+    - name: wait until dispatcher return value from aem {{ role_comment }}
       uri:
         url: "http://{{ dockerhost_ip.stdout }}:{{ test_dispatcher_port }}{{ test_aem_page_url }}"
         follow_redirects: "all"

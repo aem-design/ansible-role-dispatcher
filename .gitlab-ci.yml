@@ -4,6 +4,9 @@ stages:
 services:
   - docker:dind
 
+variables:
+  ROLE_META: "meta/main.yml"
+
 test:
   stage: test
   image: aemdesign/ansible-playbook:centos7
@@ -21,7 +24,7 @@ test:
     # Install pip dependencies
     - pip install testinfra molecule docker
     # Rename role to what it needs to be called in ansible galaxy
-    - cd ../
+    - cd ..
     - mv ansible-role-$ROLE_REPO_NAME $ROLE_NAME_FULL
     - cd $ROLE_NAME_FULL
     # Run molecule test

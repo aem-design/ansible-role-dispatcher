@@ -41,3 +41,4 @@ molecule:
     - cd $ROLE_NAME_FULL
     # Run molecule test
     - molecule test --scenario-name nginx
+    - molecule test

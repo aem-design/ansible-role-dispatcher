@@ -27,7 +27,7 @@
       register: dockerhost_ip
       changed_when: false
     - name: set aem license
-      include_role:
+      import_role:
         name: "aem_design.aem_license"
       vars:
         aem_license_key: "{{ service_aem_license_key }}"
@@ -37,14 +37,14 @@
         wait_delay: 30
         debug_hide: false
     - name: verify aem is ready
-      include_role:
+      import_role:
         name: "aem_design.aem_verify"
       vars:
         aem_port: "{{ test_aem_port }}"
         aem_host: "{{ dockerhost_ip.stdout }}"
         debug_hide: false
     - name: set permissions for vanityUrls
-      include_role:
+      import_role:
         name: "{{ role_name }}"
       vars:
         aem_port: "{{ test_aem_port }}"
@@ -57,21 +57,20 @@
             permissions: 'read:true'
           }
         debug_hide: false
-
-  roles:
-    - {
-      role: "{{ role_name }}",
-      docker_host: "{{ test_docker_host }}",
-      renderer_port: "{{ test_aem_port }}",
-      renderer_host: "{{ dockerhost_ip.stdout }}",
-      dispatcher_config: "publish",
-      dispatcher_loglevel: "4",
-      docker_container_name: "{{ test_container_name }}",
-      dispatcher_port: "{{ test_dispatcher_port }}",
-      dispatcher_https_port: "{{ test_dispatcher_port_https }}",
-      docker_volumes: [],
-      debug_hide: false
-    }
+    - name: start disaptcher
+      import_role:
+        name: "{{ role_name }}"
+      vars:
+        docker_host: "{{ test_docker_host }}"
+        renderer_port: "{{ test_aem_port }}"
+        renderer_host: "{{ dockerhost_ip.stdout }}"
+        dispatcher_config: "publish"
+        dispatcher_loglevel: "4"
+        docker_container_name: "{{ test_container_name }}"
+        dispatcher_port: "{{ test_dispatcher_port }}"
+        dispatcher_https_port: "{{ test_dispatcher_port_https }}"
+        docker_volumes: []
+        debug_hide: false
 
   post_tasks:
     - name: wait until dispatcher return value from author {{ role_comment }}

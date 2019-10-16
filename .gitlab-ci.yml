@@ -1,0 +1,35 @@
+stages:
+  - test
+
+services:
+  - aemdesign/aem:6.5.0-bundle
+
+variables:
+  TZ: "Australia/Sydney"
+  AEM_JVM_OPTS:
+    -server -Xms248m -Xmx1524m -XX:MaxDirectMemorySize=256M -XX:+CMSClassUnloadingEnabled -Djava.awt.headless=true
+    -Dorg.apache.felix.http.host=0.0.0.0"
+  AEM_RUNMODE: "-Dsling.run.modes=publish,crx3,crx3tar,dev"
+
+test:
+  stage: package
+  image: aemdesign/ansible-playbook:centos7
+  script:
+    # Read role from meta.yml and replace '-' with '_' to be Ansible friendly
+    - export ROLE_REPO_NAME=$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/")
+    - export ROLE_NAME=$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/" | sed "s/-/_/g")
+    - export ROLE_NAMESPACE=$(grep "company:" ${ROLE_META} | sed -e "s/.*company.* \(.*\)/\1/" | sed "s/\./_/g")
+    # Store Ansible friendly role name to use in molecule.yml
+    - export ROLE_NAME_FULL=$ROLE_NAMESPACE.$ROLE_NAME
+    - echo ROLE_REPO_NAME=${ROLE_REPO_NAME}
+    - echo ROLE_NAME=${ROLE_NAME}
+    - echo ROLE_NAMESPACE=${ROLE_NAMESPACE}
+    - echo ROLE_NAME_FULL=${ROLE_NAME_FULL}
+    # Install pip dependencies
+    - pip install testinfra molecule docker
+    # Rename role to what it needs to be called in ansible galaxy
+    - cd ../
+    - mv ansible-role-$ROLE_REPO_NAME $ROLE_NAME_FULL
+    - cd $ROLE_NAME_FULL
+    # Run molecule test
+    - molecule test

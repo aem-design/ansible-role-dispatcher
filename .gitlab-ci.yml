@@ -2,14 +2,7 @@ stages:
   - test
 
 services:
-  - aemdesign/aem:6.5.0-bundle
-
-variables:
-  TZ: "Australia/Sydney"
-  AEM_JVM_OPTS:
-    -server -Xms248m -Xmx1524m -XX:MaxDirectMemorySize=256M -XX:+CMSClassUnloadingEnabled -Djava.awt.headless=true
-    -Dorg.apache.felix.http.host=0.0.0.0"
-  AEM_RUNMODE: "-Dsling.run.modes=publish,crx3,crx3tar,dev"
+  - docker:dind
 
 test:
   stage: package

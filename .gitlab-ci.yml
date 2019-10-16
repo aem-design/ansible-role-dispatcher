@@ -5,7 +5,7 @@ services:
   - docker:dind
 
 test:
-  stage: package
+  stage: test
   image: aemdesign/ansible-playbook:centos7
   script:
     # Read role from meta.yml and replace '-' with '_' to be Ansible friendly

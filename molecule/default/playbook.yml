@@ -45,7 +45,7 @@
         debug_hide: false
     - name: set permissions for vanityUrls
       import_role:
-        name: "{{ role_name }}"
+        name: aem_design.aem_content
       vars:
         aem_port: "{{ test_aem_port }}"
         aem_host: "{{ dockerhost_ip.stdout }}"
@@ -57,6 +57,8 @@
             permissions: 'read:true'
           }
         debug_hide: false
+
+  tasks:
     - name: start disaptcher
       import_role:
         name: "{{ role_name }}"

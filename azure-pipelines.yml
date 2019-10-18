@@ -10,33 +10,44 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.6'
-- bash: |
-    echo "##vso[task.setvariable variable=ROLE_REPO_NAME;isOutput=true]$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/")"
-    #export ROLE_REPO_NAME=$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/")
-    #export ROLE_NAME=$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/" | sed "s/-/_/g")
-    #export ROLE_NAMESPACE=$(grep "company:" ${ROLE_META} | sed -e "s/.*company.* \(.*\)/\1/" | sed "s/\./_/g")
-    #export ROLE_NAME_FULL="$ROLE_NAMESPACE.$ROLE_NAME"
-    echo ROLE_REPO_NAME=${ROLE_REPO_NAME}
-    #echo ROLE_NAME=${ROLE_NAME}
-    #echo ROLE_NAMESPACE=${ROLE_NAMESPACE}
-    #echo ROLE_NAME_FULL=${ROLE_NAME_FULL}
-  displayName: 'set variables'
+jobs:
+- job: A
+  variables:
+    a: 10
+  steps:
+    - bash: |
+        echo $(a)            # This will be 10
+        echo '##vso[task.setvariable variable=a]20'
+        echo $(a)            # This will also be 10, since the expansion of $(a) happens before the step
+    - bash: echo $(a)  
 
+# steps:
+# - task: UsePythonVersion@0
+#   inputs:
+#     versionSpec: '3.6'
 # - bash: |
-#     pip install testinfra molecule docker
-#   displayName: 'install dependecies'
+#     echo "##vso[task.setvariable variable=ROLE_REPO_NAME;isOutput=true]$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/")"
+#     #export ROLE_REPO_NAME=$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/")
+#     #export ROLE_NAME=$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/" | sed "s/-/_/g")
+#     #export ROLE_NAMESPACE=$(grep "company:" ${ROLE_META} | sed -e "s/.*company.* \(.*\)/\1/" | sed "s/\./_/g")
+#     #export ROLE_NAME_FULL="$ROLE_NAMESPACE.$ROLE_NAME"
+#     echo ROLE_REPO_NAME=${ROLE_REPO_NAME}
+#     #echo ROLE_NAME=${ROLE_NAME}
+#     #echo ROLE_NAMESPACE=${ROLE_NAMESPACE}
+#     #echo ROLE_NAME_FULL=${ROLE_NAME_FULL}
+#   displayName: 'set variables'
 
-# - bash: |
-#     cd ../
-#     mv ansible-role-$ROLE_REPO_NAME $ROLE_NAME_FULL
-#     cd $ROLE_NAME_FULL
-#   displayName: 'rename role to match galaxy'
+# # - bash: |
+# #     pip install testinfra molecule docker
+# #   displayName: 'install dependecies'
 
-# - bash: |
-#     molecule test
-#   displayName: 'run molecule'
+# # - bash: |
+# #     cd ../
+# #     mv ansible-role-$ROLE_REPO_NAME $ROLE_NAME_FULL
+# #     cd $ROLE_NAME_FULL
+# #   displayName: 'rename role to match galaxy'
+
+# # - bash: |
+# #     molecule test
+# #   displayName: 'run molecule'
 

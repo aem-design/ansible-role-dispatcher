@@ -42,7 +42,6 @@ steps:
     echo "ROLE_NAME_FULL=$ROLE_NAME_FULL"
   displayName: 'output variables'
 - bash: |
-    python -v
     pip install wheel
     python setup.py bdist_wheel
     pip install testinfra molecule docker

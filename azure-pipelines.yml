@@ -7,9 +7,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  configuration: debug
-  ROLE_META: "meta/main.yml"
-  PYTHON_VERSION: "3.6"
+  - name: ROLE_META
+    value: "meta/main.yml"
+  - name: PYTHON_VERSION
+    value: "3.6"
+  - group: variables-aem
 
 steps:
   - task: UsePythonVersion@0

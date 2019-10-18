@@ -16,7 +16,7 @@ jobs:
     a: 10
   steps:
     - bash: |
-        echo "##vso[task.setvariable variable=ROLE_REPO_NAME;isOutput=true]$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/")"
+        echo '##vso[task.setvariable variable=ROLE_REPO_NAME;isOutput=true]$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/")'
 
 # steps:
 # - task: UsePythonVersion@0

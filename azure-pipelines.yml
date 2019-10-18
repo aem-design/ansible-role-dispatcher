@@ -15,6 +15,9 @@ variables:
   ROLE_META: "meta/main.yml"
 
 steps:
+- checkout: self  # self represents the repo where the initial Pipelines YAML file was found
+  path: "ansible-role-dispatcher"
+  displayName: 'checkout'
 - bash: |
     # Read role from meta.yml and replace '-' with '_' to be Ansible friendly
     ROLE_REPO_NAME=$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/")
@@ -37,10 +40,8 @@ steps:
     pip install testinfra molecule docker
   displayName: 'install pip dependecies'
 - bash: |
-    # pwd
-    # cd ../
-    # mv ansible-role-$ROLE_REPO_NAME $ROLE_NAME_FULL
-    # cd $ROLE_NAME_FULL
-    ROLE_NAME_FULL=$(basename `pwd`)
+    cd ../
+    mv ansible-role-$ROLE_REPO_NAME $ROLE_NAME_FULL
+    cd $ROLE_NAME_FULL
     molecule test
   displayName: 'rename role to match galaxy convention and run molecule'

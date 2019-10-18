@@ -13,8 +13,13 @@ pool:
 variables:
   configuration: debug
   ROLE_META: "meta/main.yml"
+  PYTHON_VERSION: "3.6"
 
 steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '$(PYTHON_VERSION)'
+  displayName: 'Use Python $(PYTHON_VERSION)'
 - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
   path: "ansible-role-dispatcher"
   displayName: 'checkout'

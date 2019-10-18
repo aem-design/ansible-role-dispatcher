@@ -11,7 +11,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: |
+- bash: |
     export ROLE_REPO_NAME=$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/")
     export ROLE_NAME=$(grep "role_name:" ${ROLE_META} | sed -e "s/.*role_name.* \(.*\)/\1/" | sed "s/-/_/g")
     export ROLE_NAMESPACE=$(grep "company:" ${ROLE_META} | sed -e "s/.*company.* \(.*\)/\1/" | sed "s/\./_/g")
@@ -22,17 +22,17 @@ steps:
     echo ROLE_NAME_FULL=${ROLE_NAME_FULL}
   displayName: 'set variables'
 
-- script: |
+- bash: |
     pip install testinfra molecule docker
   displayName: 'install dependecies'
 
-- script: |
+- bash: |
     cd ../
     mv ansible-role-$ROLE_REPO_NAME $ROLE_NAME_FULL
     cd $ROLE_NAME_FULL
   displayName: 'rename role to match galaxy'
 
-- script: |
+- bash: |
     molecule test
   displayName: 'run molecule'
 

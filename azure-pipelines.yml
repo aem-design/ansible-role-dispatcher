@@ -40,8 +40,12 @@ steps:
     pip install testinfra molecule docker
   displayName: 'install pip dependecies'
 - bash: |
+    pwd
     cd ../
+    pwd
     mv ansible-role-$ROLE_REPO_NAME $ROLE_NAME_FULL
+    ls -l 
     cd $ROLE_NAME_FULL
+    pwd
     molecule test
   displayName: 'rename role to match galaxy convention and run molecule'

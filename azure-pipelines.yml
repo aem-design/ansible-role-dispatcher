@@ -45,10 +45,13 @@ steps:
       pip install testinfra molecule docker
     displayName: 'install pip dependecies'
   - bash: |
-      echo "AEM_NAME=$secret.AEM_NAME"
-      echo "AEM_KEY=$secret.AEM_KEY"
+      echo "AEM_NAME=$AEM_NAME"
+      echo "AEM_KEY=$AEM_KEY"
       cd ../
       mv ansible-role-$ROLE_REPO_NAME $ROLE_NAME_FULL
       cd $ROLE_NAME_FULL
       molecule test
     displayName: 'run molecule'
+    env:
+      AEM_KEY: $(AEM_KEY)
+      AEM_NAME: $(AEM_NAME)

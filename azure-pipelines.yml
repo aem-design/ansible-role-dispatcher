@@ -38,8 +38,8 @@ steps:
   displayName: 'install pip dependecies'
 - bash: |
     cd ../
-    mv ansible-role-$(ROLE_REPO_NAME) $(ROLE_NAME_FULL)
-    cd $(ROLE_NAME_FULL)
+    mv ansible-role-$ROLE_REPO_NAME $ROLE_NAME_FULL
+    cd $ROLE_NAME_FULL
   displayName: 'rename role to match galaxy convention'
 - bash: |
     molecule test

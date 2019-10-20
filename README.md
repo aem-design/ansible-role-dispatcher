@@ -1,6 +1,6 @@
 # Ansible Role: Dispatcher
 
-[![Build Status](https://dev.azure.com/aemdesign/AEM.Design/_apis/build/status/aem-design.ansible-role-dispatcher?branchName=master)](https://dev.azure.com/aemdesign/AEM.Design/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://travis-ci.org/aem-design/ansible-role-dispatcher.svg?branch=master)](https://travis-ci.org/aem-design/ansible-role-dispatcher)
 [![Ansible Role](https://img.shields.io/ansible/role/d/43187)](https://galaxy.ansible.com/aem_design/dispatcher/)
 [![Ansible Role](https://img.shields.io/ansible/role/43187)](https://galaxy.ansible.com/aem_design/dispatcher/)
 [![Docker Container](https://img.shields.io/badge/container-aemdesign%2Fdispatcher-blue)](https://hub.docker.com/r/aemdesign/dispatcher)
